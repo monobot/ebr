@@ -1,0 +1,22 @@
+{% extends "core.html" %}
+{% load bootstrap %}
+{% block inside_content %}
+    {% if user.is_authenticated %}
+        <h2>You are logged in!</h2>
+        <p>Welcome <b>{{ user.username }}</b></p>
+        <p>Want to change password? <a class="btn" href="{% url 'change_password' %}" title="Change password">change it here</a></p>
+    {% else %}
+        <h2>Login</h2>
+
+        <form id="contact_form" action="." method="POST">
+            {% csrf_token %}
+            {{ form|bootstrap }}
+            <div class="tier_3_text">* All fields are required.</div>
+            <input class="btn" type="submit" value="Login" title="Login">
+        </form>
+
+        <h4>Register</h4>
+        <div class="tier_3_text">If you don't have an account yet, you can register <a class="medium_button" href="{% url 'register' %}" title="Register">here</a></div>
+    {% endif %}
+</div>
+{% endblock %}

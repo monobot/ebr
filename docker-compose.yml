@@ -1,0 +1,46 @@
+version: '2.0'
+services:
+  db_eb_postgres:
+    restart: always
+    image: postgres
+    volumes:
+      - ./db_backup/:/var/db_backup
+    container_name: db_eb_postgres
+
+  db_eb_testing:
+    image: postgres
+    container_name: db_eb_testing
+
+  redis_cache:
+    restart: always
+    image: redis:latest
+    container_name: redis_cache
+
+  django:
+    restart: always
+    build: .
+    container_name: eburyroot_django
+    command: ["./start.sh", "db_eb_postgres", ]
+    depends_on:
+      - db_eb_postgres
+      - redis_cache
+    volumes:
+      - ./ebury:/ebury
+      - ./ebury/static:/static
+      - ./logs:/logs
+    expose:
+      - "8000"
+
+  webserver:
+    restart: always
+    image: nginx:latest
+    container_name: webserver
+    ports:
+      - "80:80"
+    volumes:
+      - ./ebury:/ebury
+      - ./ebury/static:/static
+      - ./scripts/nginx:/etc/nginx/conf.d
+      - ./logs:/logs
+    depends_on:
+      - django

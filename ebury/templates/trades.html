@@ -1,0 +1,104 @@
+{% extends "core.html" %}
+
+{% block inside_content %}
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="app" class="table-responsive">
+                <div class="row">
+                    <div class="col-sm-6"><h3>Booked Trades</h3></div>
+                    <div class="col-sm-6"><button v-on:click="formtoggle" class="btn btn-primary pull-right">new</button></div>
+                </div>
+
+                <table class="table table-condensed table-hover" id="sorttable">
+                    <thead>
+                        <th onclick="sortTable(0)">Sell CCY</th>
+                        <th onclick="sortTable(1)">Sell Amount</th>
+                        <th onclick="sortTable(2)">Buy CCY</th>
+                        <th onclick="sortTable(3)">Buy Amount</th>
+                        <th>rate</th>
+                        <th onclick="sortTable(5)">Date Booked</th>
+                    </thead>
+                    <tbody>
+                        <template v-for="trade in trades">
+                            <tr>
+                                <td>[[  trade.sell_currency  ]]</td>
+                                <td>[[  trade.sell_amount  ]]</td>
+                                <td>[[  trade.buy_currency  ]]</td>
+                                <td>[[  trade.buy_amount  ]]</td>
+                                <td>[[  trade.rate  ]]</td>
+                                <td>[[  trade.date  ]]</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+                <template v-if="formstatus == 'show'">
+                    <h3>New Trade</h3>
+                        <form id="contact_form" action="." method="POST" class="form-inline">
+                            {% csrf_token %}
+                    <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Sell currency</label>
+                                        <select v-model="sell_currency" class="form-control" @change="get_rate()">
+                                            <option v-for="option in currencies" v-bind:value="option.value">
+                                                [[ option.text ]]
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 align-middle"> &gt; [[ rate ]] &gt; </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Buy currency</label>
+                                        <select v-model="buy_currency" class="form-control" @change="get_rate()">
+                                            <option v-for="option in currencies" v-bind:value="option.value">
+                                                [[ option.text ]]
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label class="control-label">Sell amount</label>
+                                        <input v-model="sell_amount" class="form-control"  onkeypress='return event.charCode >= 48 && event.charCode <= 57' @change="calc_buyamount()">
+                                        </input>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label>Buy amount</label>
+                                        <input class="form-control" v-bind:value="buy_amount" readonly>
+                                    </div>
+                                </div>
+
+                            <div class="col-sm-4">All fields required.</div>
+                    <div class="row">
+                        </form>
+                    </div>
+                        <div class="col-sm-4">
+                            <input type="button" class="btn btn-danger" value="place trade" v-on:click="place_trade">
+                        </div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-4">
+                            <input type="button" class="btn btn-warning" value="cancel trade" v-on:click="clear_form" >
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+{% endblock inside_content %}
+
+{% block javascript %}
+    {# vue #}
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+    <script src="{{ STATIC_URL }}js/app.js" ></script>
+    {# vue #}
+
+    <script type="text/javascript">
+        var exchanges_cache = {{ exchanges_cache|safe }};
+    </script>
+    <script src="{{ STATIC_URL }}js/tablesort.js" ></script>
+{% endblock javascript %}

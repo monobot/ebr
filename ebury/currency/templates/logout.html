@@ -1,0 +1,20 @@
+{% extends "core.html" %}
+{% block inside_content %}
+<div id="container">
+    <div class="primary" id="contacts_us">
+        <h1 class="title_module"><span>You have been logged out</span></h1>
+        <div class="content" id="content_contacts">
+            <div class="contact_tier contact_tier_3">
+                <h2 class="first">Login again</h2>
+                <a class="medium_button" href="{% url 'login' %}" title="Login">Login</a>
+            </div>
+        </div>
+        <div class="content" id="content_contacts">
+            <div class="contact_tier contact_tier_3">
+                <h2 class="first">Back to home</h2>
+                <a class="medium_button" href="{% url 'home' %}" title="Home">Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

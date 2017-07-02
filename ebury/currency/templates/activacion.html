@@ -1,0 +1,14 @@
+{% extends 'core.html' %}
+{% block inside_content %}
+<div id="container">
+    <div class="primary" id="contacts_us">
+        <h1 class="title_module"><span>Bienvenido {{ user.username }}</b></span></h1>
+    </div>
+    <div class="content" id="content_contacts">
+        <div class="tier_3_text">Muchas Gracias, por registrarse.</div>
+        <div class="tier_3_text">Su cuenta no obstante sigue inactiva, se le ha enviado un correo electrónico con instrucciones para la activación.</div>
+        <br>
+        <h1><span>Ir a la <a href="{%url 'home' %}">página de inicio</a></b></span></h1>
+    </div>
+</div>
+{% endblock %}
