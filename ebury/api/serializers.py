@@ -22,15 +22,17 @@ class TradePostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Trade
+        # I want all these fields to be returned when the process finish
         fields = (
+            'identifier',
             'sell_currency',
             'sell_amount',
             'buy_currency',
             'buy_amount',
             'rate',
-            'identifier',
             'date',
         )
+        # but these fields not available in the api form
         read_only_fields = (
             'buy_amount',
             'rate',
